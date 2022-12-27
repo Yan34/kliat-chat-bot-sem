@@ -7,13 +7,20 @@ class NeuralNet(nn.Module):
         super(NeuralNet, self).__init__()
         self.l1 = nn.Linear(input_size, hidden_size)
         self.l2 = nn.Linear(hidden_size, hidden_size)
-        self.l3 = nn.Linear(hidden_size, num_classes)
+        self.l3 = nn.Linear(hidden_size, hidden_size)
+        self.l4 = nn.Linear(hidden_size, num_classes)
         self.activation = nn.Sigmoid()
+        self.dropout = nn.Dropout(0.2)
 
     def forward(self, x):
         out = self.l1(x)
+        out = self.dropout(out)
         out = self.activation(out)
         out = self.l2(out)
+        out = self.dropout(out)
+        out = self.activation(out)
+        out = self.l3(out)
+        out = self.dropout(out)
         out = self.activation(out)
         out = self.l3(out)
         # no activation and no softmax at the end
